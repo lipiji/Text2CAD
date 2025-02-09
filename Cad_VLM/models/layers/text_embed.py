@@ -24,11 +24,17 @@ class TextEmbedder(nn.Module):
         device = "cuda" if torch.cuda.is_available() else "cpu"
         self.max_seq_len = max_seq_len
         self.model_name = MODEL_NAME_DICT.get(model_name, "bert_large_uncased")
-        self.tokenizer = BertTokenizer.from_pretrained(self.model_name, cache_dir=cache_dir)
+        #self.tokenizer = BertTokenizer.from_pretrained(self.model_name, cache_dir=cache_dir)
+        #self.model = BertModel.from_pretrained(
+        #        self.model_name, cache_dir=cache_dir, max_position_embeddings=max_seq_len
+        #    ).to(device)
+    
+        self.tokenizer = BertTokenizer.from_pretrained(cache_dir + self.model_name)
         self.model = BertModel.from_pretrained(
-                self.model_name, cache_dir=cache_dir, max_position_embeddings=max_seq_len
+                cache_dir + self.model_name,  max_position_embeddings=max_seq_len
             ).to(device)
     
+
     def get_embedding(self, texts:list[str]):
         if isinstance(texts, str):
             texts = [texts]
